@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <assert.h>
+#include <inttypes.h>
 
 #include "mu-riscv.h"
 
@@ -500,7 +501,7 @@ void handle_instruction()
 {
 	/*IMPLEMENT THIS*/
 	/* execute one instruction at a time. Use/update CURRENT_STATE and and NEXT_STATE, as necessary.*/
-	
+
 	
 }
 
@@ -522,6 +523,13 @@ void initialize() {
 void print_program(){
 	/*IMPLEMENT THIS*/
 	/* execute one instruction at a time. Use/update CURRENT_STATE and and NEXT_STATE, as necessary.*/
+
+	uint32_t pc = 0x00400000;
+	while(mem_read_32(pc) != 0){
+		printf("%" PRIu32 "\n",mem_read_32(pc));
+		pc += 4;
+	}
+	
 	
 }
 
