@@ -529,9 +529,49 @@ void print_program(){
 
 
 	// Iterate list until no more commands
-	while(mem_read_32(pc) != 0){
-		printf("%" PRIu32 "\n",mem_read_32(pc));
+	uint32_t ccmd = mem_read_32(pc);
+	while(ccmd != 0){
+		printf("%" PRIu32 "\n", ccmd);
+		switch(get_opcode_type(ccmd)){
+
+
+			case R:
+
+			break;
+
+
+
+			// case I:
+
+			// break;
+
+
+
+			// case S:
+
+			// break;
+
+
+
+			// case U:
+
+			// break;
+
+
+
+
+			// case J:
+
+			// break;
+
+
+
+			// case B:
+
+			// break;
+		};
 		pc += 4;
+		
 	}
 	
 	
