@@ -524,7 +524,11 @@ void print_program(){
 	/*IMPLEMENT THIS*/
 	/* execute one instruction at a time. Use/update CURRENT_STATE and and NEXT_STATE, as necessary.*/
 
+	// Start at initial program counter
 	uint32_t pc = 0x00400000;
+
+
+	// Iterate list until no more commands
 	while(mem_read_32(pc) != 0){
 		printf("%" PRIu32 "\n",mem_read_32(pc));
 		pc += 4;
