@@ -501,8 +501,40 @@ void handle_instruction()
 {
 	/*IMPLEMENT THIS*/
 	/* execute one instruction at a time. Use/update CURRENT_STATE and and NEXT_STATE, as necessary.*/
-
-	
+	//uint32_t cmd = mem_read_32(CURRENT_STATE.PC);
+	//uint8_t opcode = cmd & BIT_MASK_7;
+	switch(get_opcode_type(mem_read_32(CURRENT_STATE.PC))) {
+		case R:
+			//R_Processing();
+			uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
+			uint8_t rd = bincmd >> 7 & BIT_MASK_5;
+			uint8_t funct3 = bincmd >> 12 & BIT_MASK_3;
+			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
+			uint8_t rs2 = bincmd >> 20 & BIT_MASK_5;
+			uint8_t funct7 = bincmd >> 25 & BIT_MASK_7;
+			R_Processing(rd, funct3, rs1, rs2, funct7);
+			break;
+		case I:
+			//Iload_Processing() or Iimm_Processing()?
+			break;
+		
+		case S:
+			//S_Processing();
+			break;
+		case B:
+			//B_Processing();
+			break;
+		case J:
+			//J_Processing();
+			break;
+		case U:
+			//U_Processing();
+			break;
+		default:
+			printf("Unknown instruction with opcode %d at address 0x%08x", mem_read_32(CURRENT_STATE.PC) & BIT_MASK_7, CURRENT_STATE.PC);
+			RUN_FLAG = FALSE;
+			break;
+	}
 }
 
 
