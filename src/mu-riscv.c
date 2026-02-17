@@ -519,7 +519,15 @@ void handle_instruction()
 			break;
 		
 		case S:
-			//S_Processing();
+
+			uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
+			uint8_t imm4 = bincmd >> 7 & BIT_MASK_5;
+			uint8_t f3 = bincmd >> 12 & BIT_MASK_3;
+			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
+			uint8_t rs2 = bincmd >> 20 & BIT_MASK_5;
+			uint8_t imm11 = bincmd >> 25 & BIT_MASK_7;
+			uint16_t imm = (imm11 | imm4);
+			S_Processing(uint32_t imm4, uint32_t f3, uint32_t rs1, uint32_t rs2, uint32_t imm11)
 			break;
 		case B:
 			//B_Processing();
