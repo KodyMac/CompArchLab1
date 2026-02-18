@@ -522,7 +522,7 @@ void handle_instruction()
 			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
 			uint8_t imm = bincmd >> 20 & (BIT_MASK_12);
 
-			Iimm_Processing(uint32_t rd, uint32_t f3, uint32_t rs1, uint32_t imm)
+			Iimm_Processing((uint32_t) rd, (uint32_t) funct3, (uint32_t) rs1, (uint32_t) imm);
 			
 			break;
 		
@@ -535,7 +535,7 @@ void handle_instruction()
 			uint8_t rs2 = bincmd >> 20 & BIT_MASK_5;
 			uint8_t imm11 = bincmd >> 25 & BIT_MASK_7;
 			uint16_t imm = (imm11 | imm4);
-			S_Processing(uint32_t imm4, uint32_t f3, uint32_t rs1, uint32_t rs2, uint32_t imm11)
+			S_Processing((uint32_t) imm4, (uint32_t) f3, (uint32_t) rs1, (uint32_t) rs2, (uint32_t) imm11);
 			break;
 		case B:
 			//B_Processing();
