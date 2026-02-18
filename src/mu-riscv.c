@@ -516,6 +516,14 @@ void handle_instruction()
 			break;
 		case I:
 			//Iload_Processing() or Iimm_Processing()?
+			uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
+			uint8_t rd = bincmd >> 7 & BIT_MASK_5;
+			uint8_t funct3 = bincmd >> 12 & BIT_MASK_3;
+			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
+			uint8_t imm = bincmd >> 20 & (BIT_MASK_12);
+
+			Iimm_Processing(uint32_t rd, uint32_t f3, uint32_t rs1, uint32_t imm)
+			
 			break;
 		
 		case S:
