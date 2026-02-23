@@ -501,42 +501,38 @@ void handle_instruction()
 {
 	/*IMPLEMENT THIS*/
 	/* execute one instruction at a time. Use/update CURRENT_STATE and and NEXT_STATE, as necessary.*/
-	//uint32_t cmd = mem_read_32(CURRENT_STATE.PC);
-	//uint8_t opcode = cmd & BIT_MASK_7;
-	switch(get_opcode_type(mem_read_32(CURRENT_STATE.PC))) {
-		case R:
-			//R_Processing();
-			uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
-			uint8_t rd = bincmd >> 7 & BIT_MASK_5;
-			uint8_t funct3 = bincmd >> 12 & BIT_MASK_3;
-			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
-			uint8_t rs2 = bincmd >> 20 & BIT_MASK_5;
-			uint8_t funct7 = bincmd >> 25 & BIT_MASK_7;
+	uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
+	NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+	switch(get_opcode_type(bincmd)) {
+		case R: {
+			uint8_t rd = (bincmd >> 7) & BIT_MASK_5;
+			uint8_t funct3 = (bincmd >> 12) & BIT_MASK_3;
+			uint8_t rs1 = (bincmd >> 15) & BIT_MASK_5;
+			uint8_t rs2 = (bincmd >> 20) & BIT_MASK_5;
+			uint8_t funct7 = (bincmd >> 25) & BIT_MASK_7;
 			R_Processing(rd, funct3, rs1, rs2, funct7);
 			break;
-		case I:
-			//Iload_Processing() or Iimm_Processing()?
-			uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
-			uint8_t rd = bincmd >> 7 & BIT_MASK_5;
-			uint8_t funct3 = bincmd >> 12 & BIT_MASK_3;
-			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
-			uint8_t imm = bincmd >> 20 & (BIT_MASK_12);
+		}
+		case I: {
+			uint8_t rd = (bincmd >> 7) & BIT_MASK_5;
+			uint8_t funct3 = (bincmd >> 12) & BIT_MASK_3;
+			uint8_t rs1 = (bincmd >> 15) & BIT_MASK_5;
+			uint8_t imm = (bincmd >> 20);
 
 			Iimm_Processing((uint32_t) rd, (uint32_t) funct3, (uint32_t) rs1, (uint32_t) imm);
 			
 			break;
+		}
 		
-		case S:
-
-			uint32_t bincmd = mem_read_32(CURRENT_STATE.PC);
-			uint8_t imm4 = bincmd >> 7 & BIT_MASK_5;
-			uint8_t f3 = bincmd >> 12 & BIT_MASK_3;
-			uint8_t rs1 = bincmd >> 15 & BIT_MASK_5;
-			uint8_t rs2 = bincmd >> 20 & BIT_MASK_5;
-			uint8_t imm11 = bincmd >> 25 & BIT_MASK_7;
-			uint16_t imm = (imm11 | imm4);
-			S_Processing((uint32_t) imm4, (uint32_t) f3, (uint32_t) rs1, (uint32_t) rs2, (uint32_t) imm11);
+		case S: {
+			uint8_t imm4 = (bincmd >> 7) & BIT_MASK_5;
+			uint8_t f3 = (bincmd >> 12) & BIT_MASK_3;
+			uint8_t rs1 = (bincmd >> 15) & BIT_MASK_5;
+			uint8_t rs2 = (bincmd >> 20) & BIT_MASK_5;
+			uint8_t imm11 = (bincmd >> 25) & BIT_MASK_7;
+			S_Processing(imm4, f3, rs1, rs2, imm11);
 			break;
+		}
 		case B:
 			//B_Processing();
 			break;
