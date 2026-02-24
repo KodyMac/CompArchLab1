@@ -514,11 +514,16 @@ void handle_instruction()
 			break;
 		}
 		case I: {
-			uint8_t rd = (bincmd >> 7) & BIT_MASK_5;
+			uint8_t rd     = (bincmd >> 7) & BIT_MASK_5;
 			uint8_t funct3 = (bincmd >> 12) & BIT_MASK_3;
-			uint8_t rs1 = (bincmd >> 15) & BIT_MASK_5;
-			uint8_t imm = (bincmd >> 20);
+			uint8_t rs1    = (bincmd >> 15) & BIT_MASK_5;
 			uint8_t opcode = bincmd & 0x7F;
+
+			int32_t imm = (bincmd >> 20) & 0xFFF; 
+
+			if (imm & 0x800) {
+				imm |= 0xFFFFF000;
+			}
 
 			if(opcode == 0b0000011) {
 				ILoad_Processing(rd, funct3, rs1, imm);
