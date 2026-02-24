@@ -518,8 +518,18 @@ void handle_instruction()
 			uint8_t funct3 = (bincmd >> 12) & BIT_MASK_3;
 			uint8_t rs1 = (bincmd >> 15) & BIT_MASK_5;
 			uint8_t imm = (bincmd >> 20);
+			uint8_t opcode = bincmd & 0x7F;
 
-			Iimm_Processing((uint32_t) rd, (uint32_t) funct3, (uint32_t) rs1, (uint32_t) imm);
+			if(opcode == 0b0000011) {
+				ILoad_Processing(rd, funct3, rs1, imm);
+			}
+			else if(opcode == 0b0010011) {
+				Iimm_Processing(rd, funct3, rs1, imm);
+			}
+			else {
+				printf("Unknown opcode(%d) for I-Type.", opcode);
+				RUN_FLAG = FALSE;
+			}
 			
 			break;
 		}
