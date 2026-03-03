@@ -35,6 +35,152 @@ uint32_t byte_to_word(uint8_t byte)
     return (byte & 0x80) ? (byte | 0xffffff80) : byte;
 }
 
+
+
+
+char * r_command_map[] = {
+	"add",
+	"sub",
+	"sll",
+	"slt",
+	"sltu",
+	"xor",
+	"srl",
+	"sra",
+	"or",
+	"and",
+};
+
+char * i_imm_command_map[] = {
+	"addi",
+	"slli",
+	"xori",
+	"srli", 
+	"srai",
+	"ori",
+	"andi",
+};
+
+char * i_load_command_map[] = {
+	"lb",
+	"lh",
+	"lw",
+};
+
+char * s_command_map[] = {
+	"sb",
+	"sh",
+	"sw",
+};
+
+
+enum OPCODE_TYPE parseTokenType(char* token) {
+
+	enum OPCODE_TYPE retVal = ERROR;
+    for(int i = 0; i < NUM_CODES; i++) {
+        // opcode only 7 bits, so only compare those 7 bits 
+            // (by forcing a zero into the 8th bit, the opcodes have a 0 zero there by default)
+        
+		// R
+
+		for(int j = 0; j < 9; j++) {
+			printf("Found R-type command: %s\n", r_command_map[j]);
+			if(strcmp(token, r_command_map[j]) == 0) {
+				retVal = R;
+				break;
+			}
+		}
+
+		// I-imm
+		for(int j = 0; j < 6; j++) {
+			if(strcmp(token, i_imm_command_map[j]) == 0) {
+				retVal = I;
+				break;
+			}
+		}
+
+
+		// I-load
+		for(int j = 0; j < 2; j++) {
+			if(strcmp(token, i_load_command_map[j]) == 0) {
+				retVal = I;
+				break;
+			}
+		}
+
+
+		// S
+		for(int j = 0; j < 2; j++) {
+			if(strcmp(token, s_command_map[j]) == 0) {
+				retVal = S;
+				break;
+			}
+		}
+
+    }
+	printf("\nenum value: = %d", retVal);
+	return retVal;
+};
+
+
+
+
+void load_riscv_instructions() {                   
+	FILE * fp;
+	int i;
+	char word[10] = {0,0,0,0,0,0,0,0,0,0};
+	word[0] = '\0';
+	uint32_t address;
+	/* Open program file. */
+	fp = fopen(riscv_file, "r");
+	if (fp == NULL) {
+		printf("Error: Can't open program file %s\n", riscv_file);
+		exit(-1);
+	}
+
+	/* Read in the program. */
+
+	i = 0;
+	while( fscanf(fp, "%s\n", &word) != EOF ) {
+		char *token;
+		printf("read in instruction: %s\n", word);
+		token = strtok(word, " ");
+		enum OPCODE_TYPE type = parseTokenType(token);
+		switch (type) {
+			case R:
+				printf("R type instruction: %s\n", token);
+				break;
+			case I:
+				printf("I type instruction: %s\n", token);
+				// handle i type
+				break;
+			case S:
+				printf("S type instruction: %s\n", token);
+				// handle s type
+				break;
+			case U:
+				printf("U type instruction: %s\n", token);
+				// handle u type
+				break;
+			case J:
+				// handle j type
+				break;
+			case B:
+				// handle b type
+				break;
+			default:
+				printf("Unknown instruction: %s", token);
+				break;
+		}
+		break;
+	}
+
+	fclose(fp);
+};
+
+
+
+
 /***************************************************************/
 /* Turn a halfword to a word                                                                          */
 /***************************************************************/
@@ -241,14 +387,15 @@ void handle_command() {
 			break;
 		case 'P':
 		case 'p':
-			print_program(); 
+			if (buffer[1] == 'a' || buffer[1] == 'r'){
+			load_riscv_instructions(); 
 			break;
 		default:
 			printf("Invalid Command.\n");
 			break;
 	}
 }
-
+}
 /***************************************************************/
 /* reset registers/memory and reload program                                                    */
 /***************************************************************/
@@ -873,6 +1020,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	strcpy(prog_file, argv[1]);
+	strcpy(riscv_file, argv[2]);
 	initialize();
 	load_program();
 	help();
@@ -880,4 +1028,6 @@ int main(int argc, char *argv[]) {
 		handle_command();
 	}
 	return 0;
-}
+};
+
+

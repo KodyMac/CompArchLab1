@@ -96,7 +96,8 @@ int RUN_FLAG;	/* run flag*/
 uint32_t INSTRUCTION_COUNT;
 uint32_t PROGRAM_SIZE; /*in words*/
 
-char prog_file[32];
+char prog_file[80];
+char riscv_file[80];
 
 
 /***************************************************************/
